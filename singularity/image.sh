@@ -1,5 +1,6 @@
-BootStrap: docker
-From: ubuntu:latest
+BootStrap: debootstrap
+OSVersion: xenial
+MirrorURL: http://us.archive.ubuntu.com/ubuntu/
 
 %environment
     PATH=/app/centrifuge:/app/stampede-centrifuge/scripts:$PATH
