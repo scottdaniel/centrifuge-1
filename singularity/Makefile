@@ -2,9 +2,9 @@ SING242 = /usr/local/bin/singularity #2.4.2-dist
 SING231 = /home/vagrant/bin/singularity #2.3.1-dist
 
 SINGULARITY = $(SING231)
-IMG_NAME = radscot1.img
+IMG_NAME = RADCOT.img
 DEF_NAME = image.sh
-SIZE = 2048
+SIZE = 3036
 
 run:
 	sudo $(SINGULARITY) run $(IMG_NAME)
@@ -21,4 +21,4 @@ shell:
 	sudo $(SINGULARITY) shell --writable -B $(shell pwd):/tmp $(IMG_NAME)
 
 scp:
-	scp $(IMG_NAME) stampede:/work/03137/kyclark/centrifuge-0.0.2/stampede
+	scp $(IMG_NAME) stampede2:/work/03859/sdaniel/stampede2/

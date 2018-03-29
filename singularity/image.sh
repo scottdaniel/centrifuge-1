@@ -3,16 +3,21 @@ OSVersion: xenial
 MirrorURL: http://us.archive.ubuntu.com/ubuntu/
 
 %environment
-    PATH=/app/centrifuge:/app/stampede-centrifuge/scripts:$PATH
+    PATH=/apps/miniconda:/app/centrifuge:/app/stampede-centrifuge/scripts:$PATH
     LD_LIBRARY_PATH=/app
     export LD_LIBRARY_PATH
 
 %runscript
-    exec /app/centrifuge/centrifuge "$@"
+    exec /app/stampede-centrifuge/scripts/launch_centrifuge.py "$@"
 
 %post
+	echo "Hello from inside the container"
+    sed -i 's/$/ universe/' /etc/apt/sources.list
     apt-get update
-    apt-get install -y locales git build-essential wget curl zip libcurl4-openssl-dev libssl-dev python3 python3-pip
+    apt-get upgrade
+
+	#essential stuff
+    apt -y --force-yes install git sudo man vim build-essential wget unzip perl curl gdebi-core zip locales libcurl4-openssl-dev libssl-dev
     locale-gen en_US.UTF-8
 
     #
@@ -22,12 +27,28 @@ MirrorURL: http://us.archive.ubuntu.com/ubuntu/
     mkdir -p $APP_DIR
     cd $APP_DIR
 
+	curl -L https://cpanmin.us | perl - App::cpanminus
+    cpanm --self-upgrade --sudo
+
+    wget https://github.com/PATRIC3/PATRIC-distribution/releases/download/1.018/patric-cli-1.018.deb
+    sudo gdebi -n patric-cli-1.018.deb
+    cpanm install Class::Accessor
+    git clone https://github.com/SEEDtk/RASTtk.git
+    cp -r -n RASTtk/lib/* /usr/share/patric-cli/deployment/lib/
+
     wget -O centrifuge.zip ftp://ftp.ccb.jhu.edu/pub/infphilo/centrifuge/downloads/centrifuge-1.0.3-beta-Linux_x86_64.zip
     unzip centrifuge.zip
     mv centrifuge-1.0.3-beta centrifuge
 
     git clone https://github.com/hurwitzlab/stampede-centrifuge.git
-    python3 -m pip install biopython
+
+	wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
+    bash Miniconda3-latest-Linux-x86_64.sh -b -p /apps/miniconda
+	rm Miniconda3-latest-Linux-x86_64.sh 
+    sudo ln -s /apps/miniconda/bin/python /usr/bin/python
+    PATH="/apps/miniconda/bin:$PATH"
+	conda install -y -c conda-forge plumbum
+	conda install -y -c bioconda biopython
 
     #
     # Add CRAN to sources to get latest R
