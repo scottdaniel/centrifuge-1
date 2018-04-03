@@ -109,6 +109,25 @@
                 "repeatArgument": false,
                 "showArgument": true
             }
+        },
+        {
+            "id": "MIN_ABUNDANCE",
+            "value": {
+                "default": 0.01,
+                "type": "number",
+                "order": 3,
+                "required": false,
+                "visible": true,
+                "enquote": false,
+                "validator": ""
+            },
+            "details": {
+                "description": "Minimum abundance of a species (as calculated by centrifuge: see manual for details) needed to include in list of genomes to download from PATRIC. Default = 0.01 / 1%",
+                "label": "Minimum Abundance",
+                "argument": "-a",
+                "repeatArgument": false,
+                "showArgument": true
+            }
         }
     ],
     "outputs": []
