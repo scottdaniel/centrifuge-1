@@ -74,3 +74,10 @@ EOF
     mkdir /home1
     mkdir /scratch
     mkdir /work
+
+    # 
+    # Mount points for Ocelote if needed
+    # 
+    #mkdir /extra 
+    #mkdir /xdisk 
+    #mkdir /rsgrps
