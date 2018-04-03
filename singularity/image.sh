@@ -3,7 +3,7 @@ OSVersion: xenial
 MirrorURL: http://us.archive.ubuntu.com/ubuntu/
 
 %environment
-    PATH=/apps/miniconda:/app/centrifuge:/app/stampede-centrifuge/scripts:$PATH
+    PATH=/app/miniconda:/app/centrifuge:/app/stampede-centrifuge/scripts:$PATH
     LD_LIBRARY_PATH=/app
     export LD_LIBRARY_PATH
 
@@ -17,7 +17,7 @@ MirrorURL: http://us.archive.ubuntu.com/ubuntu/
     apt-get upgrade
 
 	#essential stuff
-    apt -y --force-yes install git sudo man vim build-essential wget unzip perl curl gdebi-core zip locales libcurl4-openssl-dev libssl-dev
+    apt -y --allow-downgrades install git sudo man vim build-essential wget unzip perl curl gdebi-core zip locales libcurl4-openssl-dev libssl-dev cpanminus
     locale-gen en_US.UTF-8
 
     #
@@ -26,9 +26,6 @@ MirrorURL: http://us.archive.ubuntu.com/ubuntu/
     export APP_DIR=/app
     mkdir -p $APP_DIR
     cd $APP_DIR
-
-	curl -L https://cpanmin.us | perl - App::cpanminus
-    cpanm --self-upgrade --sudo
 
     wget https://github.com/PATRIC3/PATRIC-distribution/releases/download/1.018/patric-cli-1.018.deb
     sudo gdebi -n patric-cli-1.018.deb
@@ -40,13 +37,14 @@ MirrorURL: http://us.archive.ubuntu.com/ubuntu/
     unzip centrifuge.zip
     mv centrifuge-1.0.3-beta centrifuge
 
-    git clone https://github.com/hurwitzlab/stampede-centrifuge.git
-
+    git clone https://github.com/scottdaniel/centrifuge-1.git --branch RADCOT \
+        --single-branch stampede-centrifuge
+    
 	wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
-    bash Miniconda3-latest-Linux-x86_64.sh -b -p /apps/miniconda
+    bash Miniconda3-latest-Linux-x86_64.sh -b -p /app/miniconda
 	rm Miniconda3-latest-Linux-x86_64.sh 
-    sudo ln -s /apps/miniconda/bin/python /usr/bin/python
-    PATH="/apps/miniconda/bin:$PATH"
+    sudo ln -s /app/miniconda/bin/python /usr/bin/python
+    PATH="/app/miniconda/bin:$PATH"
 	conda install -y -c conda-forge plumbum
 	conda install -y -c bioconda biopython
 
