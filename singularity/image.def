@@ -8,7 +8,7 @@ MirrorURL: http://us.archive.ubuntu.com/ubuntu/
     export LD_LIBRARY_PATH
 
 %runscript
-    exec /app/stampede-centrifuge/scripts/launch_centrifuge.py "$@"
+    exec /app/centrifuge/centrifuge "$@"
 
 %post
 	echo "Hello from inside the container"
@@ -47,6 +47,7 @@ MirrorURL: http://us.archive.ubuntu.com/ubuntu/
     PATH="/app/miniconda/bin:$PATH"
 	conda install -y -c conda-forge plumbum
 	conda install -y -c bioconda biopython
+    conda install -y pandas
 
     #
     # Add CRAN to sources to get latest R

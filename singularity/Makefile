@@ -3,7 +3,7 @@ SING231 = /home/vagrant/bin/singularity #2.3.1-dist
 
 SINGULARITY = $(SING231)
 IMG_NAME = RADCOT.img
-DEF_NAME = image.sh
+DEF_NAME = image.def
 SIZE = 3036
 
 run:
