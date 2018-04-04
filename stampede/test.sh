@@ -13,4 +13,4 @@ OUT_DIR="$WORK/centrifuge_test"
 
 [[ -d "$OUT_DIR" ]] && rm -rf $OUT_DIR/*
 
-sh run.sh -d "$WORK/in" -o $OUT_DIR -x 9606,32630
+sh run.sh -q "$WORK/in" -o $OUT_DIR -x 9606,32630
