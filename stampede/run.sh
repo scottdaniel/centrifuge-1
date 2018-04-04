@@ -331,3 +331,5 @@ echo "Finished bubble"
 
 echo "Done, look in OUT_DIR \"$OUT_DIR\""
 echo "Comments to Ken Youens-Clark <kyclark@email.arizona.edu>"
+echo "or Scott Daniel <scottdaniel@email.arizona.edu>"
+echo "for version that runs patric-cli along with centrifuge (RADCOT)"
