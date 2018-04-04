@@ -265,7 +265,7 @@ if [[ $NUM_INPUT -gt 0 ]]; then
         if [[ $NUM_SPLIT_FILES -lt 1 ]]; then
             let i++
             printf "%6d: Split %s\n" $i "$(basename "$FILE")"
-            echo "singularity exec $CENTRIFUGE_IMG fasplit.py -f $FILE -o $FILE_SPLIT_DIR -n $MAX_SEQS_PER_FILE" >> "$SPLIT_PARAM"
+            echo "singularity exec $CENTRIFUGE_IMG fqsplit.py -f $FILE -o $FILE_SPLIT_DIR -n $MAX_SEQS_PER_FILE" >> "$SPLIT_PARAM"
         fi
     done < "$INPUT_FILES"
 
