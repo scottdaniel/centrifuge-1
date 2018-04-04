@@ -17,11 +17,18 @@ if __name__ == "__main__":
     argparse.ArgumentParser(description="Script to just print out names and taxon_ids from a centrifuge report")
     
     parser.add_argument("-r", "--report", action="store", \
-            help="Centrifuge report file, usually: centrifue_report.tsv")
+            help="Centrifuge report directory, usually: centrifuge_report.tsv", \
+            default='./centrifuge_report.tsv')
     parser.add_argument("-t", "--taxid", action="store_true", \
             help="Print only taxids")
     parser.add_argument("-n", "--name", action="store_true", \
             help="Print only species names")
+    parser.add_argument("-o", "--output", action="store", \
+            help="Output directory for genomes and annotations", \
+            default='./')
+    parser.add_argument("-a", "--min-abundance", action="store", \
+            help="Minimum abundance needed to download a species\' genome", \
+            default='.01', type=float)
         
     args = vars(parser.parse_args())
 
