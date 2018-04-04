@@ -3,9 +3,11 @@ OSVersion: xenial
 MirrorURL: http://us.archive.ubuntu.com/ubuntu/
 
 %environment
-    PATH=/app/miniconda:/app/centrifuge:/app/stampede-centrifuge/scripts:$PATH
+    PATH=/app/miniconda/bin:/app/centrifuge:/app/stampede-centrifuge/scripts:$PATH
     LD_LIBRARY_PATH=/app
     export LD_LIBRARY_PATH
+    export PYTHON="/app/miniconda/bin/python"
+    export PYTHONPATH="/app/miniconda/pkgs"
 
 %runscript
     exec /app/centrifuge/centrifuge "$@"
