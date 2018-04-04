@@ -32,6 +32,7 @@ CENTRIFUGE_IMG="RADCOT.img"
 EXCLUDE_TAXIDS=""
 SKIP_EXISTING=1
 PARAMRUN="$TACC_LAUNCHER_DIR/paramrun"
+MIN_ABUNDANCE=0.01
 
 #
 # Some needed functions
@@ -65,6 +66,7 @@ function HELP() {
     echo " -o OUT_DIR ($OUT_DIR)"
     echo " -s SINGLETONS"
     echo " -k SKIP_EXISTING ($SKIP_EXISTING)"
+    echo " -m MIN_ABUNDANCE ($MIN_ABUNDANCE)"
     echo " -x EXCLUDE_TAXIDS"
     echo ""
     exit 0
@@ -75,7 +77,7 @@ function HELP() {
 #
 [[ $# -eq 0 ]] && HELP
 
-while getopts :a:d:i:f:m:o:q:r:s:x:kh OPT; do
+while getopts :a:d:i:f:m:o:q:r:s:m:x:kh OPT; do
     case $OPT in
         a)
             FASTA="$OPTARG"
@@ -109,6 +111,9 @@ while getopts :a:d:i:f:m:o:q:r:s:x:kh OPT; do
             ;;
         s)
             SINGLETONS="$OPTARG"
+            ;;
+        m)
+            MIN_ABUNDANCE="$OPTARG"
             ;;
         x)
             EXCLUDE_TAXIDS="$OPTARG"
@@ -332,9 +337,10 @@ echo "Finished bubble"
 #
 # Getting genomes from PATRIC
 #
+GENOME_DIR="$OUT_DIR/genomes"
 echo "Getting genomes and annotations from patricbrc.org"
 #-r directory with tsv report file -o output directory for 
-singularity exec $CENTRIFUGE_IMG cfuge_to_genome.py -r "$COLLAPSE_DIR" -o $GENOME_DIR -a $MIN_ABUNDANCE
+singularity exec $CENTRIFUGE_IMG cfuge_to_genome.py -r "$COLLAPSE_DIR" -o $GENOME_DIR -m $MIN_ABUNDANCE
 
 echo "Done, look in OUT_DIR \"$OUT_DIR\""
 echo "Comments to Ken Youens-Clark <kyclark@email.arizona.edu>"
