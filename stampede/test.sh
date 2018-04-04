@@ -13,4 +13,4 @@ OUT_DIR="$WORK/centrifuge/test"
 
 [[ -d "$OUT_DIR" ]] && rm -rf $OUT_DIR/*
 
-sh run.sh -f "$WORK/in/DNA_control_R1.fastq" -r "$WORK/DNA_control_R2.fastq" -o $OUT_DIR
+sh run.sh -q "$WORK/in" -o $OUT_DIR
