@@ -51,6 +51,12 @@ MirrorURL: http://us.archive.ubuntu.com/ubuntu/
 	conda install -y -c bioconda biopython
     conda install -y pandas
 
+    #lightweight fastq splitter in C
+    git clone https://github.com/vasisht/fastq_splitter.git
+    cd fastq_splitter
+    gcc -o fastq_splitter fastq_splitter.c -lz
+    sudo mv fastq_splitter /usr/local/bin
+
     #
     # Add CRAN to sources to get latest R
     #
