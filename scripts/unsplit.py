@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-"""Unsplit FASTA files"""
+"""Unsplit FASTA/FASTQ files"""
 
 import argparse
 import os
@@ -10,8 +10,8 @@ from collections import defaultdict
 # --------------------------------------------------
 def get_args():
     """command-line args"""
-    parser = argparse.ArgumentParser(description='Unsplit FASTA files')
-    parser.add_argument('-d', '--dir', help='FASTA directory',
+    parser = argparse.ArgumentParser(description='Unsplit FASTA/Q files')
+    parser.add_argument('-d', '--dir', help='FASTA/Q directory',
                         type=str, metavar='DIR', required=True)
     parser.add_argument('-o', '--out_dir', help='Output directory',
                         type=str, metavar='DIR', required=True)
