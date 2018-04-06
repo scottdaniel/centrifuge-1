@@ -20,7 +20,7 @@ set -u
 IN_DIR=""
 QUERY=""
 MODE="single"
-FASTA=""
+FASTX=""
 FORWARD=""
 REVERSE=""
 SINGLETONS=""
@@ -44,8 +44,8 @@ function lc() {
 function HELP() {
     printf "Usage:\n  %s -q DIR_OR_FILE\n\n" "$(basename "$0")"
     printf "Usage:\n  %s -d IN_DIR\n\n" "$(basename "$0")"
-    printf "Usage:\n  %s -a FASTA\n\n" "$(basename "$0")"
-    printf "Usage:\n  %s -f FASTA_r1 -r FASTA_r2 [-s SINGLETONS]\n\n" \
+    printf "Usage:\n  %s -a FASTX\n\n" "$(basename "$0")"
+    printf "Usage:\n  %s -f FASTX_r1 -r FASTX_r2 [-s SINGLETONS]\n\n" \
       "$(basename "$0")"
   
     echo "Required arguments:"
@@ -55,11 +55,11 @@ function HELP() {
     echo " -d IN_DIR (single-only)"
     echo ""
     echo "OR"
-    echo " -a FASTA (single)"
+    echo " -a FASTX (single)"
     echo ""
     echo "OR"
-    echo " -f FASTA_r1 (forward)"
-    echo " -r FASTA_r2 (reverse)"
+    echo " -f FASTX_r1 (forward)"
+    echo " -r FASTX_r2 (reverse)"
     echo ""
     echo "Options:"
     echo " -i INDEX ($INDEX)"
@@ -80,7 +80,7 @@ function HELP() {
 while getopts :a:d:i:f:m:o:q:r:s:m:x:kh OPT; do
     case $OPT in
         a)
-            FASTA="$OPTARG"
+            FASTX="$OPTARG"
             ;;
         d)
             IN_DIR="$OPTARG"
@@ -195,15 +195,15 @@ export LAUNCHER_SCHED=interleaved
 INPUT_FILES=$(mktemp)
 
 #
-# A single FASTA
+# A single FASTX
 #
-if [[ -n "$FASTA" ]]; then
-    BASENAME=$(basename "$FASTA")
-    echo "Will process single FASTA \"$BASENAME\""
-    echo "$RUN_CENTRIFUGE -f -x $INDEX -U $FASTA -S $REPORT_DIR/$BASENAME.sum --report-file $REPORT_DIR/$BASENAME.tsv" > "$CENT_PARAM"
+if [[ -n "$FASTX" ]]; then
+    BASENAME=$(basename "$FASTX")
+    echo "Will process single FASTX \"$BASENAME\""
+    echo "$RUN_CENTRIFUGE -f -x $INDEX -U $FASTX -S $REPORT_DIR/$BASENAME.sum --report-file $REPORT_DIR/$BASENAME.tsv" > "$CENT_PARAM"
 
 #
-# Paired-end FASTA reads
+# Paired-end FASTX reads
 #
 elif [[ -n "$FORWARD" ]] && [[ -n "$REVERSE" ]]; then
     BASENAME=$(basename "$FORWARD")
@@ -215,7 +215,7 @@ elif [[ -n "$FORWARD" ]] && [[ -n "$REVERSE" ]]; then
     echo "$RUN_CENTRIFUGE -f -x $INDEX -1 $FORWARD -2 $REVERSE $S -S $REPORT_DIR/$BASENAME.sum --report-file $REPORT_DIR/$BASENAME.tsv" > "$CENT_PARAM"
 
 #
-# A directory of single FASTA files
+# A directory of single FASTX files
 #
 elif [[ -n "$IN_DIR" ]] && [[ -d "$IN_DIR" ]]; then
     if [[ $MODE == 'single' ]]; then
@@ -243,7 +243,7 @@ elif [[ -n "$QUERY" ]]; then
 # Else "error"
 #
 else
-    echo "Must have -d IN_DIR/-a FASTA/-f FORWARD & -r REVERSE [-s SINGLETON]"
+    echo "Must have -d IN_DIR/-a FASTX/-f FORWARD & -r REVERSE [-s SINGLETON]"
     exit 1
 fi
 
@@ -265,7 +265,7 @@ if [[ $NUM_INPUT -gt 0 ]]; then
         if [[ $NUM_SPLIT_FILES -lt 1 ]]; then
             let i++
             printf "%6d: Split %s\n" $i "$(basename "$FILE")"
-            echo "singularity exec $CENTRIFUGE_IMG fqsplit.py -f $FILE -o $FILE_SPLIT_DIR -n $MAX_SEQS_PER_FILE" >> "$SPLIT_PARAM"
+            echo "singularity exec $CENTRIFUGE_IMG fxsplit.py -f $FILE -o $FILE_SPLIT_DIR -n $MAX_SEQS_PER_FILE" >> "$SPLIT_PARAM"
         fi
     done < "$INPUT_FILES"
 
