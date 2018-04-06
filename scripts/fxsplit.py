@@ -12,13 +12,12 @@ from Bio import SeqIO
 def main():
     """main"""
     args = get_args()
-    is_fq = args.is_fq
     fastx = args.fastx
     out_dir = args.out_dir
     max_per = args.num
 
     if not os.path.isfile(fastx):
-        print('--fastx "{}" is not valid'.format(fastx))
+        print('--fastx "{}" is not a file'.format(fastx))
         exit(1)
 
     if not os.path.isdir(out_dir):
@@ -38,7 +37,7 @@ def main():
     # The Main Loop
     #
 
-    if is_fq is True: #check whether its fastq
+    if is_fasta(fastx) is False: #check whether its fastq
         for record in SeqIO.parse(fastq, "fastq"):
             if i == max_per: #check whether reached max records for a file
                 i = 0
@@ -54,7 +53,7 @@ def main():
                 out_fh = open(path, 'wt') #open up a new file
 
             SeqIO.write(record, out_fh, "fastq") #write the next record to the file, repeat until i reaches the max_per
-    else:
+    elif is_fasta(fastx) is True:
         for record in SeqIO.parse(fasta, "fasta"):
             if i == max_per:
                 i = 0
@@ -70,6 +69,8 @@ def main():
                 out_fh = open(path, 'wt')
 
             SeqIO.write(record, out_fh, "fasta")
+    else:
+        print("{} is not a valid FASTA or FASTQ file!".format(fastx))
 
     #
     # Logging message
@@ -78,6 +79,12 @@ def main():
     print('Done, wrote {} sequence{} to {} file{}'.format(
         nseq, '' if nseq == 1 else 's',
         nfile, '' if nfile == 1 else 's'))
+
+# --------------------------------------------------
+def is_fasta(filename):
+    with open(filename, "r") as handle:
+        fasta = SeqIO.parse(handle, "fasta")
+        return any(fasta)  # False when `fasta` is empty, i.e. wasn't a FASTA file
 
 # --------------------------------------------------
 def get_args():
@@ -89,8 +96,6 @@ def get_args():
                         type=int, metavar='NUM', default=50)
     parser.add_argument('-o', '--out_dir', help='Output directory',
                         type=str, metavar='DIR', default='fxsplit')
-    parser.add_argument('-q', '--is_fq', help='Is file FASTQ? Default = True',
-                        type=bool, metavar='ISFQ', default=True)
     return parser.parse_args()
 
 # --------------------------------------------------
