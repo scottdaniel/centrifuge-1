@@ -38,7 +38,7 @@ def main():
     #
 
     if is_fasta(fastx) is False: #check whether its fastq
-        for record in SeqIO.parse(fastq, "fastq"):
+        for record in SeqIO.parse(fastx, "fastq"):
             if i == max_per: #check whether reached max records for a file
                 i = 0
                 if out_fh is not None: #if it has reached max, close the file
@@ -54,7 +54,7 @@ def main():
 
             SeqIO.write(record, out_fh, "fastq") #write the next record to the file, repeat until i reaches the max_per
     elif is_fasta(fastx) is True:
-        for record in SeqIO.parse(fasta, "fasta"):
+        for record in SeqIO.parse(fastx, "fasta"):
             if i == max_per:
                 i = 0
                 if out_fh is not None:
