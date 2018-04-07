@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-#script that takes a centrifuge report and just spits out taxon_id and names that have abundances greater than 0 
+#script that takes a centrifuge report and download genomes and annotations
 import sys
 import argparse
 import os
@@ -11,7 +11,7 @@ import pandas as pd
 p3_all_genomes = local['p3-all-genomes']
 egrep = local['egrep']
 wget = local['wget']
-lc = local['lc']
+wc = local['wc']
 
 if __name__ == "__main__":
     parser = \
@@ -48,30 +48,39 @@ def filter_report(report):
             else:
                 print("{:d}\t{:s}".format(getattr(row,'taxID'),getattr(row,'name')))
                 holder.append(str(getattr(row,'taxID'))+'\t'+str(getattr(row,'name')))
+    return holder
 
 def download_genomes(filtered_list):
-    for taxID in holder:
-        chain = p3_all_genomes('-e', 'taxon_id', taxID, '-e', \
-                'genome_status', 'Complete') | egrep('-v', 'genome')
-        for patricID in chain():
+    for taxID in filtered_list:
+        chain = p3_all_genomes['-e', 'taxon_id'+','+str(taxID), \
+                '-e', 'genome_status,Complete'] | egrep['-v', 'genome']
+        list_of_patricIDs = chain()
+        print('These are all the ids {}'.format(list_of_patricIDs))
 
-            print('Getting PATRIC genome_id {} in fasta and Refseq gff formats'.format(patricID))
+        for patricID in list_of_patricIDs.split('\n'):
+            if patricID != '':
+                print('Getting PATRIC genome_id {} in fasta and Refseq gff formats'.format(patricID))
 
-            wget('ftp://ftp.patricbrc.org/genomes/' + patricID + '/' + \
-                    patricID + '.fna')
-            
-            wget('ftp://ftp.patricbrc.org/genomes/' + patricID + '/' + \
-                    patricID + '.RefSeq.gff')
-            #if the RefSeq.gff does not exist or it is too small (usually just means its just a header and nothing else) we get the PATRIC.gff
-
-            if not os.path.isfile(patricID + '.RefSeq.gff') or lc(patricID + '.RefSeq.gff') < 5:
                 wget('ftp://ftp.patricbrc.org/genomes/' + patricID + '/' + \
-                    patricID + '.PATRIC.gff')
+                        patricID + '.fna')
+                
+                wget('ftp://ftp.patricbrc.org/genomes/' + patricID + '/' + \
+                        patricID + '.RefSeq.gff')
+                #if the RefSeq.gff does not exist or it is too small (usually just means its just a header and nothing else) we get the PATRIC.gff
 
-            if os.path.isfile(patricID + '.RefSeq.gff'):
+                if not os.path.isfile(patricID + '.RefSeq.gff'):
+                    wget('ftp://ftp.patricbrc.org/genomes/' + patricID + '/' + \
+                        patricID + '.PATRIC.gff')
+                else:
+                    line_count = int(wc('-l', patricID + '.RefSeq.gff').strip().split()[0])
+                
+                if line_count < 5:
+                    wget('ftp://ftp.patricbrc.org/genomes/' + patricID + '/' + \
+                        patricID + '.PATRIC.gff')
+                    if os.path.isfile(patricID + '.RefSeq.gff'):
+                        os.remove(patricID + '.RefSeq.gff')
 
-                os.remove(patricID + '.RefSeq.gff')
-
+    
 report = pd.read_table(args.report,delimiter='\t')
 list_of_taxids_or_names = filter_report(report)
 download_genomes(list_of_taxids_or_names)
