@@ -27,7 +27,7 @@ if __name__ == "__main__":
     parser.add_argument("-o", "--output", action="store", \
             help="Output directory for genomes and annotations", \
             default='./')
-    parser.add_argument("-a", "--min_abundance", action="store", \
+    parser.add_argument("-m", "--min_abundance", action="store", \
             help="Minimum abundance needed to download a species\' genome", \
             default='.01', type=float)
         
