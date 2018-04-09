@@ -8,6 +8,7 @@
 #SBATCH -p normal
 
 # Author: Ken Youens-Clark <kyclark@email.arizona.edu>
+# Second author: Scott G. Daniel <scottdaniel@email.arizona.edu>
 
 module load tacc-singularity 
 module load launcher
@@ -31,7 +32,9 @@ MAX_SEQS_PER_FILE=1000000
 CENTRIFUGE_IMG="RADCOT.img"
 EXCLUDE_TAXIDS=""
 SKIP_EXISTING=1
-PARAMRUN="$TACC_LAUNCHER_DIR/paramrun"
+#If you have your own launcher setup on stampede2 just point MY_PARAMRUN at it
+#this will override the TACC_LAUNCHER...
+PARAMRUN="${MY_PARAMRUN:-$TACC_LAUNCHER_DIR/paramrun}"
 MIN_ABUNDANCE=0.01
 
 #
