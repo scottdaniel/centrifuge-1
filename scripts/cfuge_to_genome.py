@@ -17,11 +17,11 @@ wc = local['wc']
 
 if __name__ == "__main__":
     parser = \
-    argparse.ArgumentParser(description="Script that takes a centrifuge report and download genomes and annotations")
+    argparse.ArgumentParser(description="Script that takes centrifuge report(s) and download(s) genomes and annotations")
     
     parser.add_argument("-r", "--report", action="store", \
-            help="Centrifuge report, usually: centrifuge_report.tsv", \
-            default='./centrifuge_report.tsv')
+            help="Directory containing centrifuge reports or single centrifuge report", \
+            default='./')
     parser.add_argument("-o", "--output", action="store", \
             help="Output directory for genomes and annotations", \
             default='./')
@@ -97,10 +97,36 @@ def download_genomes(filtered_list):
                         except Exception as e:
                             print("Something went wrong with downloading the .PATRIC.gff Error {}".format(e))
 
+def get_reports(report_file_or_dir):
+    
+    if os.path.isfile(args.report):
+
+        report = pd.read_table(args.report,delimiter='\t')
+        list_of_taxids = filter_report(report)
+        download_genomes(list_of_taxids)
+
+    elif os.path.isdir(args.report):
+        tsv_files = []
+        for root, _, filenames in os.walk(args.report):
+            for filename in filenames:
+                if 'tsv' == filename.split('.')[-1]:
+                    tsv_files.append(os.path.join(root, filename))
+            if len(tsv_files) < 1:
+                print('Found no files in --report {}'.format(args.report))
+                sys.exit(1)
+            else:
+                for tsv in tsv_files:
+                    report = pd.read_table(tsv,delimiter='\t')
+                    list_of_taxids = filter_report(report)
+                    download_genomes(list_of_taxids)
+
+    else:
+        print('{} does not seem to be a file or a directory!'.format(args.report))
+        sys.exit(1)
+
+
 print("Start! {:s}".format(time.ctime()))
 
-report = pd.read_table(args.report,delimiter='\t')
-list_of_taxids_or_names = filter_report(report)
-download_genomes(list_of_taxids_or_names)
+all_reports = get_reports(report)
 
 print("Done! {:s}".format(time.ctime()))
