@@ -129,6 +129,6 @@ def get_reports(report_file_or_dir):
 #All the program besides the functions and setup
 print("Start! {:s}".format(time.ctime()))
 
-all_reports = get_reports(report)
+get_reports(args.report)
 
 print("Done! {:s}".format(time.ctime()))
