@@ -10,11 +10,13 @@ import errno
 from plumbum import local
 import pandas as pd
 
+#make programs easily accessible in python using plumbum!
 p3_all_genomes = local['p3-all-genomes']
 egrep = local['egrep']
 wget = local['wget']
 wc = local['wc']
 
+#digest those arguments
 if __name__ == "__main__":
     parser = \
     argparse.ArgumentParser(description="Script that takes centrifuge report(s) and download(s) genomes and annotations")
@@ -124,7 +126,7 @@ def get_reports(report_file_or_dir):
         print('{} does not seem to be a file or a directory!'.format(args.report))
         sys.exit(1)
 
-
+#All the program besides the functions and setup
 print("Start! {:s}".format(time.ctime()))
 
 all_reports = get_reports(report)
