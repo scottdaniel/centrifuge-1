@@ -339,8 +339,8 @@ echo "Finished bubble"
 #
 GENOME_DIR="$OUT_DIR/genomes"
 echo "Getting genomes and annotations from patricbrc.org"
-#-r directory with tsv report file -o output directory for 
-singularity exec $CENTRIFUGE_IMG cfuge_to_genome.py -r "$COLLAPSE_DIR" -o $GENOME_DIR -m $MIN_ABUNDANCE
+#-r directory with tsv report files -o output directory for genomes and annotations
+singularity exec $CENTRIFUGE_IMG cfuge_to_genome.py -r "$COLLAPSE_DIR" -o $GENOME_DIR -a $MIN_ABUNDANCE
 
 echo "Done, look in OUT_DIR \"$OUT_DIR\""
 echo "Comments to Ken Youens-Clark <kyclark@email.arizona.edu>"

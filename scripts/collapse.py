@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-"""unsplit centrifuge output"""
+"""Unsplit centrifuge output"""
 
 # Author: Ken Youens-Clark <kyclark@email.arizona.edu>
 
@@ -13,7 +13,7 @@ import sys
 # --------------------------------------------------
 def get_args():
     """get args"""
-    parser = argparse.ArgumentParser(description='Split FASTA files')
+    parser = argparse.ArgumentParser(description='Unsplit Centrifuge Output')
     parser.add_argument('-f', '--fasta_dir', help='FASTA dir',
                         type=str, metavar='STR')
     parser.add_argument('-l', '--file_list', help='File listing the input files',
