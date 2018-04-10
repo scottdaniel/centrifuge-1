@@ -12,8 +12,8 @@ import pandas as pd
 
 #make programs easily accessible in python using plumbum!
 p3_all_genomes = local['p3-all-genomes']
-egrep = local['egrep']
-wget = local['wget']
+#by default we do not need to download things twice!
+wget = local['wget']['--no-clobber']
 wc = local['wc']
 
 #digest those arguments
@@ -50,11 +50,14 @@ def download_genomes(filtered_list):
     #change working directory
     os.chdir(args.output)
 
+    print("Now trying to get the PATRIC id's from p3.theseed.org")
     for taxID in filtered_list:
         try:
-            print("Now trying to get the PATRIC id's from p3.theseed.org")
-            list_of_patricIDs = p3_all_genomes('-e', 'taxon_id'+','+str(taxID), \
-                '-e', 'genome_status,Complete')
+            list_of_patricIDs = p3_all_genomes('-e', 'taxon_id'+','+str(taxID))
+#                '-e', 'genome_status,Complete')
+            list_of_patricIDs = list_of_patricIDs.split('\n') 
+            list_of_patricIDs = [x for x in list_of_patricIDs if x != '' and x != 'genome.genome_id']
+            print("These are the PATRIC id's I got from {}: {}".format(taxID,list_of_patricIDs))
             
         except Exception as e:
             print("Something went wrong with the PATRIC cli. Error: {}".format(e))
@@ -63,7 +66,7 @@ def download_genomes(filtered_list):
             print("Exiting...")
             sys.exit(1)
 
-        for patricID in list_of_patricIDs.split('\n'):
+        for patricID in list_of_patricIDs:
             if patricID != '' and patricID != 'genome.genome_id':
                 print('Getting PATRIC genome_id {}'.format(patricID))
 
