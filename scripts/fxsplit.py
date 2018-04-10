@@ -34,7 +34,7 @@ def main():
     #
 
     # New way to do it, from biopython.org/wiki/Split_large_file
-    if not is_fasta(fastx): #check whether its fastq
+    if is_fasta(fastx) is False: #check whether its fastq
         print("This is a fastq") #debug check
         record_iter = SeqIO.parse(open(fastx),'fastq')
         for i, batch in enumerate(batch_iterator(record_iter, max_per)):
@@ -43,7 +43,7 @@ def main():
                 count = SeqIO.write(batch, handle, "fastq")
             print("Wrote {:d} records to {:s}".format(count, filename))
 
-    elif is_fasta(fastx):
+    elif is_fasta(fastx) is True:
         print("this is a fasta") #debug check
         record_iter = SeqIO.parse(open(fastx),'fasta')
         for i, batch in enumerate(batch_iterator(record_iter, max_per)):
@@ -58,11 +58,31 @@ def main():
 # --------------------------------------------------
 def is_fasta(filename):
     #pseudocode:
-    #use re to construct something like "^[ATCGN]$" matching pattern
+    #use re to construct something like "^[ATCGN]+$" matching pattern
     #read first 8 lines of the file
     #a fastq file will only have 2 lines that have just the pattern
     #while a fasta will have 4 lines that have just that pattern
     #Note: this will not work for multi-line fasta
+    with open(filename, 'r') as f:
+        nucleotide_line_count = 0
+        for i in range(8):
+            line = f.readline().strip()
+            print(line) #debug
+            if re.fullmatch('^[ATCGN]+$',line) is not None:
+                nucleotide_line_count += 1
+            else:
+                continue
+        #debugging text
+        print("Found {} matching nucleotide lines".format(nucleotide_line_count))
+
+        if nucleotide_line_count == 2:
+            return False #fastq
+        elif nucleotide_line_count == 4:
+            return True #fasta
+        else:
+            return None
+
+
 
 # New way to do it, from biopython.org/wiki/Split_large_file
 # --------------------------------------------------
