@@ -38,7 +38,7 @@ def main():
         print("This is a fastq") #debug check
         record_iter = SeqIO.parse(open(fastx),'fastq')
         for i, batch in enumerate(batch_iterator(record_iter, max_per)):
-            filename = os.path.join(out_dir, basename + '.' + str(i+1) + ext)
+            filename = os.path.join(out_dir, basename + '.' + str(i+1) + '.fastq')
             with open(filename, "w") as handle:
                 count = SeqIO.write(batch, handle, "fastq")
             print("Wrote {:d} records to {:s}".format(count, filename))
@@ -47,7 +47,7 @@ def main():
         print("this is a fasta") #debug check
         record_iter = SeqIO.parse(open(fastx),'fasta')
         for i, batch in enumerate(batch_iterator(record_iter, max_per)):
-            filename = os.path.join(out_dir, basename + '.' + str(i+1) + ext)
+            filename = os.path.join(out_dir, basename + '.' + str(i+1) + '.fasta')
             with open(filename, "w") as handle:
                 count = SeqIO.write(batch, handle, "fasta")
             print("Wrote {:d} records to {:s}".format(count, filename))
