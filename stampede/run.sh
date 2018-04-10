@@ -291,9 +291,11 @@ if [[ $NUM_INPUT -gt 0 ]]; then
         if [[ "$SKIP_EXISTING" -gt 0 ]] && [[ -s "$SUM_FILE" ]] && [[ -s "$TSV_FILE" ]]; then
             echo "Skipping $BASENAME - sum/tsv files exist"
         else
-            if [[ "$BASENAME" =~ "*.fasta" ]]; then
+            if [[ "$BASENAME" =~ "fasta" ]]; then
+                echo "This is a fasta" #debug
                 echo "$RUN_CENTRIFUGE -f -x $INDEX -U $FILE -S $REPORT_DIR/$BASENAME.sum --report-file $REPORT_DIR/$BASENAME.tsv" >> "$CENT_PARAM"
-            elif [[ "$BASENAME" =~ "*.fastq" ]]; then
+            elif [[ "$BASENAME" =~ "fastq" ]]; then
+                echo "This is a fastq" #debug
                 echo "$RUN_CENTRIFUGE -x $INDEX -U $FILE -S $REPORT_DIR/$BASENAME.sum --report-file $REPORT_DIR/$BASENAME.tsv" >> "$CENT_PARAM"
             else
                 echo "File is not fasta or fastq!"
