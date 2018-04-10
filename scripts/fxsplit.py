@@ -35,7 +35,7 @@ def main():
 
     # New way to do it, from biopython.org/wiki/Split_large_file
     if is_fasta(fastx) is False: #check whether its fastq
-        print("This is a fastq") #debug check
+#        print("This is a fastq") #debug check
         record_iter = SeqIO.parse(open(fastx),'fastq')
         for i, batch in enumerate(batch_iterator(record_iter, max_per)):
             filename = os.path.join(out_dir, basename + '.' + str(i+1) + '.fastq')
@@ -44,7 +44,7 @@ def main():
             print("Wrote {:d} records to {:s}".format(count, filename))
 
     elif is_fasta(fastx) is True:
-        print("this is a fasta") #debug check
+#        print("this is a fasta") #debug check
         record_iter = SeqIO.parse(open(fastx),'fasta')
         for i, batch in enumerate(batch_iterator(record_iter, max_per)):
             filename = os.path.join(out_dir, basename + '.' + str(i+1) + '.fasta')
@@ -67,13 +67,13 @@ def is_fasta(filename):
         nucleotide_line_count = 0
         for i in range(8):
             line = f.readline().strip()
-            print(line) #debug
+#            print(line) #debug
             if re.fullmatch('^[ATCGN]+$',line) is not None:
                 nucleotide_line_count += 1
             else:
                 continue
         #debugging text
-        print("Found {} matching nucleotide lines".format(nucleotide_line_count))
+#        print("Found {} matching nucleotide lines".format(nucleotide_line_count))
 
         if nucleotide_line_count == 2:
             return False #fastq
