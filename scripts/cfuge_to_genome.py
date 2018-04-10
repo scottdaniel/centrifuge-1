@@ -42,7 +42,7 @@ def filter_report(report):
 #            print("{:d}".format(getattr(row, 'taxID')))
             holder.append(getattr(row, 'taxID'))
     
-    print("After filtering, these are the PATRIC genome id's: {}".format(holder))
+    print("After filtering, these are the NCBI genome id's: {}".format(holder))
     return holder
 
 def download_genomes(filtered_list):
@@ -52,18 +52,19 @@ def download_genomes(filtered_list):
 
     for taxID in filtered_list:
         try:
-            chain = p3_all_genomes['-e', 'taxon_id'+','+str(taxID), \
-                '-e', 'genome_status,Complete'] | egrep['-v', 'genome']
-            list_of_patricIDs = chain()
+            print("Now trying to get the PATRIC id's from p3.theseed.org")
+            list_of_patricIDs = p3_all_genomes('-e', 'taxon_id'+','+str(taxID), \
+                '-e', 'genome_status,Complete')
+            
         except Exception as e:
             print("Something went wrong with the PATRIC cli. Error: {}".format(e))
             print("Can not do much without PATRIC cli")
             print("Contact patricbrc.org")
-            print("Trying next one...")
-#            sys.exit(1)
+            print("Exiting...")
+            sys.exit(1)
 
         for patricID in list_of_patricIDs.split('\n'):
-            if patricID != '':
+            if patricID != '' and patricID != 'genome.genome_id':
                 print('Getting PATRIC genome_id {}'.format(patricID))
 
                 try:
