@@ -18,7 +18,7 @@ img: clean
 	sudo $(SINGULARITY) bootstrap $(IMG_NAME) $(DEF_NAME)
 
 shell:
-	sudo $(SINGULARITY) shell --writable -B $(shell pwd):/tmp $(IMG_NAME)
+	sudo $(SINGULARITY) shell --writable -B /vagrant:/work $(IMG_NAME)
 
 scp:
 	scp $(IMG_NAME) stampede2:/work/03859/sdaniel/stampede2/

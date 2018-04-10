@@ -3,7 +3,7 @@
 
 # Author: Ken Youens-Clark <kyclark@email.arizona.edu>
 # Second Author: Scott G Daniel <scottdaniel@email.arizona.edu>
-
+import re
 import argparse
 import os
 from Bio import SeqIO
@@ -27,64 +27,72 @@ def main():
         print("--num cannot be less than one")
         exit(1)
 
-    i = 0
-    nseq = 0
-    nfile = 0
-    out_fh = None
     basename, ext = os.path.splitext(os.path.basename(fastx))
 
     #
     # The Main Loop
     #
 
-    if is_fasta(fastx) is False: #check whether its fastq
-        for record in SeqIO.parse(fastx, "fastq"):
-            if i == max_per: #check whether reached max records for a file
-                i = 0
-                if out_fh is not None: #if it has reached max, close the file
-                    out_fh.close() #that way, we'll have a new one
-                    out_fh = None
+    # New way to do it, from biopython.org/wiki/Split_large_file
+    if not is_fasta(fastx): #check whether its fastq
+        print("This is a fastq") #debug check
+        record_iter = SeqIO.parse(open(fastx),'fastq')
+        for i, batch in enumerate(batch_iterator(record_iter, max_per)):
+            filename = os.path.join(out_dir, basename + '.' + str(i+1) + ext)
+            with open(filename, "w") as handle:
+                count = SeqIO.write(batch, handle, "fastq")
+            print("Wrote {:d} records to {:s}".format(count, filename))
 
-            i += 1
-            nseq += 1 #keep track of TOTAL number of sequences
-            if out_fh is None:
-                nfile += 1 #keep track of TOTAL number of file written
-                path = os.path.join(out_dir, basename + '.' + str(nfile) + ext)
-                out_fh = open(path, 'wt') #open up a new file
+    elif is_fasta(fastx):
+        print("this is a fasta") #debug check
+        record_iter = SeqIO.parse(open(fastx),'fasta')
+        for i, batch in enumerate(batch_iterator(record_iter, max_per)):
+            filename = os.path.join(out_dir, basename + '.' + str(i+1) + ext)
+            with open(filename, "w") as handle:
+                count = SeqIO.write(batch, handle, "fasta")
+            print("Wrote {:d} records to {:s}".format(count, filename))
 
-            SeqIO.write(record, out_fh, "fastq") #write the next record to the file, repeat until i reaches the max_per
-    elif is_fasta(fastx) is True:
-        for record in SeqIO.parse(fastx, "fasta"):
-            if i == max_per:
-                i = 0
-                if out_fh is not None:
-                    out_fh.close()
-                    out_fh = None
-
-            i += 1
-            nseq += 1
-            if out_fh is None:
-                nfile += 1
-                path = os.path.join(out_dir, basename + '.' + str(nfile) + ext)
-                out_fh = open(path, 'wt')
-
-            SeqIO.write(record, out_fh, "fasta")
     else:
         print("{} is not a valid FASTA or FASTQ file!".format(fastx))
 
-    #
-    # Logging message
-    #
-
-    print('Done, wrote {} sequence{} to {} file{}'.format(
-        nseq, '' if nseq == 1 else 's',
-        nfile, '' if nfile == 1 else 's'))
-
 # --------------------------------------------------
 def is_fasta(filename):
-    with open(filename, "r") as handle:
-        fasta = SeqIO.parse(handle, "fasta")
-        return any(fasta)  # False when `fasta` is empty, i.e. wasn't a FASTA file
+    #pseudocode:
+    #use re to construct something like "^[ATCGN]$" matching pattern
+    #read first 8 lines of the file
+    #a fastq file will only have 2 lines that have just the pattern
+    #while a fasta will have 4 lines that have just that pattern
+    #Note: this will not work for multi-line fasta
+
+# New way to do it, from biopython.org/wiki/Split_large_file
+# --------------------------------------------------
+def batch_iterator(iterator, batch_size):
+    """Returns lists of length batch_size.
+
+    This can be used on any iterator, for example to batch up
+    SeqRecord objects from Bio.SeqIO.parse(...), or to batch
+    Alignment objects from Bio.AlignIO.parse(...), or simply
+    lines from a file handle.
+
+    This is a generator function, and it returns lists of the
+    entries from the supplied iterator.  Each list will have
+    batch_size entries, although the final list may be shorter.
+    """
+    entry = True  # Make sure we loop once
+    while entry:
+        batch = []
+        while len(batch) < batch_size:
+            try:
+                entry = next(iterator)
+            except StopIteration:
+                entry = None
+            if entry is None:
+                # End of file
+                break
+            batch.append(entry)
+        if batch:
+            yield batch
+
 
 # --------------------------------------------------
 def get_args():

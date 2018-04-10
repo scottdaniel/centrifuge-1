@@ -341,6 +341,7 @@ echo "Finished bubble"
 # Getting genomes from PATRIC
 #
 GENOME_DIR="$OUT_DIR/genomes"
+[[ ! -d $GENOME_DIR ]] && mkdir -p $GENOME_DIR
 echo "Getting genomes and annotations from patricbrc.org"
 #-r directory with tsv report files -o output directory for genomes and annotations
 singularity exec $CENTRIFUGE_IMG cfuge_to_genome.py -r "$COLLAPSE_DIR" -o $GENOME_DIR -m $MIN_ABUNDANCE
