@@ -21,4 +21,4 @@ shell:
 	sudo $(SINGULARITY) shell --writable -B /vagrant:/work $(IMG_NAME)
 
 scp:
-	scp $(IMG_NAME) stampede2:/work/03859/sdaniel/stampede2/
+	scp $(IMG_NAME) stampede2:/work/03859/sdaniel/stampede2/stampede_centrifuge/stampede/
