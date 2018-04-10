@@ -39,7 +39,7 @@ def filter_report(report):
 
     for row in report.itertuples(index=True, name='Pandas'):
         if getattr(row, 'abundance') > args.min_abundance:
-            print("{:d}".format(getattr(row, 'taxID')))
+#            print("{:d}".format(getattr(row, 'taxID')))
             holder.append(getattr(row, 'taxID'))
     
     print("After filtering, these are the PATRIC genome id's: {}".format(holder))
@@ -59,8 +59,8 @@ def download_genomes(filtered_list):
             print("Something went wrong with the PATRIC cli. Error: {}".format(e))
             print("Can not do much without PATRIC cli")
             print("Contact patricbrc.org")
-            print("Exiting...")
-            sys.exit(1)
+            print("Trying next one...")
+#            sys.exit(1)
 
         for patricID in list_of_patricIDs.split('\n'):
             if patricID != '':
