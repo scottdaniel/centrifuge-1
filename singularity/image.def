@@ -3,7 +3,7 @@ OSVersion: xenial
 MirrorURL: http://us.archive.ubuntu.com/ubuntu/
 
 %environment
-    PATH=/app/miniconda/bin:/app/centrifuge:/app/stampede-centrifuge/scripts:$PATH
+    PATH=/app/miniconda/bin:/app/centrifuge:/app/centrifuge-patric/scripts:$PATH
     LD_LIBRARY_PATH=/app
     export LD_LIBRARY_PATH
     export PYTHON="/app/miniconda/bin/python"
@@ -39,8 +39,8 @@ MirrorURL: http://us.archive.ubuntu.com/ubuntu/
     unzip centrifuge.zip
     mv centrifuge-1.0.3-beta centrifuge
 
-    git clone https://github.com/scottdaniel/centrifuge-1.git --branch RADCOT \
-        --single-branch stampede-centrifuge
+    git clone https://github.com/scottdaniel/centrifuge-patric.git --branch RADCOT \
+        --single-branch centrifuge-patric
     
 	wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
     bash Miniconda3-latest-Linux-x86_64.sh -b -p /app/miniconda
@@ -74,7 +74,7 @@ local({
   options(repos = r)
 })
 EOF
-    /usr/bin/Rscript /app/stampede-centrifuge/scripts/install.r
+    /usr/bin/Rscript /app/centrifuge-patric/scripts/install.r
 
     #
     # Mount points for TACC directories

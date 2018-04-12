@@ -3,88 +3,77 @@
 
 # Author: Ken Youens-Clark <kyclark@email.arizona.edu>
 # Second Author: Scott G Daniel <scottdaniel@email.arizona.edu>
-import re
+import gzip
+import sys
 import argparse
 import os
 from Bio import SeqIO
 
 # --------------------------------------------------
+def get_args():
+    """get args"""
+    parser = argparse.ArgumentParser(
+        description="Split FASTA files",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+
+    parser.add_argument("-i", "--infile", help="Input file",
+                        type=str, metavar="FILE", required=True)
+
+    parser.add_argument("-f", "--format", help="Format (fasta, fastq)",
+                        type=str, metavar="FILE", default="fasta")
+
+    parser.add_argument("-n", "--num", help="Number of records per file",
+                        type=int, metavar="NUM", default=50)
+
+    parser.add_argument("-o", "--out_dir", help="Output directory",
+                        type=str, metavar="DIR", default="split-files")
+
+    return parser.parse_args()
+
+# --------------------------------------------------
 def main():
-    """main"""
     args = get_args()
-    fastx = args.fastx
+    infile = args.infile
+    file_format = args.format.lower()
     out_dir = args.out_dir
     max_per = args.num
 
-    if not os.path.isfile(fastx):
-        print('--fastx "{}" is not a file'.format(fastx))
-        exit(1)
+    if not os.path.isfile(infile):
+        print('--infile "{}" is not valid'.format(infile))
+        sys.exit(1)
 
     if not os.path.isdir(out_dir):
         os.mkdir(out_dir)
 
     if max_per < 1:
         print("--num cannot be less than one")
-        exit(1)
+        sys.exit(1)
 
-    basename, ext = os.path.splitext(os.path.basename(fastx))
+    if not file_format in set(['fasta', 'fastq']):
+        print("--format ({}) must be fasta/q".format(file_format))
+        sys.exit(1)
 
-    #
-    # The Main Loop
-    #
+    i = 0
+    nseq = 0
+    nfile = 0
+    out_fh = None
+    basename, ext = os.path.splitext(os.path.basename(infile))
 
-    # New way to do it, from biopython.org/wiki/Split_large_file
-    if is_fasta(fastx) is False: #check whether its fastq
-#        print("This is a fastq") #debug check
-        record_iter = SeqIO.parse(open(fastx),'fastq')
-        for i, batch in enumerate(batch_iterator(record_iter, max_per)):
-            filename = os.path.join(out_dir, basename + '.' + str(i+1) + '.fastq')
-            with open(filename, "w") as handle:
-                count = SeqIO.write(batch, handle, "fastq")
-            print("Wrote {:d} records to {:s}".format(count, filename))
-
-    elif is_fasta(fastx) is True:
-#        print("this is a fasta") #debug check
-        record_iter = SeqIO.parse(open(fastx),'fasta')
-        for i, batch in enumerate(batch_iterator(record_iter, max_per)):
-            filename = os.path.join(out_dir, basename + '.' + str(i+1) + '.fasta')
-            with open(filename, "w") as handle:
-                count = SeqIO.write(batch, handle, "fasta")
-            print("Wrote {:d} records to {:s}".format(count, filename))
-
+    handle = None
+    if ext == ".gz":
+        handle = gzip.open(infile, "rt")
+        basename, ext = os.path.splitext(basename)
     else:
-        print("{} is not a valid FASTA or FASTQ file!".format(fastx))
+        handle = open(infile, "rt")
 
-# --------------------------------------------------
-def is_fasta(filename):
-    #pseudocode:
-    #use re to construct something like "^[ATCGN]+$" matching pattern
-    #read first 8 lines of the file
-    #a fastq file will only have 2 lines that have just the pattern
-    #while a fasta will have 4 lines that have just that pattern
-    #Note: this will not work for multi-line fasta
-    with open(filename, 'r') as f:
-        nucleotide_line_count = 0
-        for i in range(8):
-            line = f.readline().strip()
-#            print(line) #debug
-            if re.fullmatch('^[ATCGN]+$',line) is not None:
-                nucleotide_line_count += 1
-            else:
-                continue
-        #debugging text
-#        print("Found {} matching nucleotide lines".format(nucleotide_line_count))
+    record_iter = SeqIO.parse(handle, file_format)
+    for i, batch in enumerate(batch_iterator(record_iter, max_per)):
+        filename = os.path.join(out_dir, basename + '.' + str(i+1) + file_format)
+        with open(filename, "w") as handle:
+            count = SeqIO.write(batch, handle, file_format)
+        print("Wrote {:d} records to {:s}".format(count, filename))
 
-        if nucleotide_line_count == 2:
-            return False #fastq
-        elif nucleotide_line_count == 4:
-            return True #fasta
-        else:
-            return None
-
-
-
-# New way to do it, from biopython.org/wiki/Split_large_file
+# from biopython.org/wiki/Split_large_file
 # --------------------------------------------------
 def batch_iterator(iterator, batch_size):
     """Returns lists of length batch_size.
@@ -113,18 +102,6 @@ def batch_iterator(iterator, batch_size):
         if batch:
             yield batch
 
-
-# --------------------------------------------------
-def get_args():
-    """get args"""
-    parser = argparse.ArgumentParser(description='Split FASTA/Q files')
-    parser.add_argument('-f', '--fastx', help='FASTA/Q input file',
-                        type=str, metavar='FILE', required=True)
-    parser.add_argument('-n', '--num', help='Number of records per file',
-                        type=int, metavar='NUM', default=50)
-    parser.add_argument('-o', '--out_dir', help='Output directory',
-                        type=str, metavar='DIR', default='fxsplit')
-    return parser.parse_args()
 
 # --------------------------------------------------
 if __name__ == '__main__':
