@@ -29,13 +29,14 @@ INDEX="p_compressed+h+v"
 OUT_DIR="$PWD/centrifuge-out"
 INDEX_DIR="/work/05066/imicrobe/iplantc.org/data/centrifuge-indexes"
 MAX_SEQS_PER_FILE=1000000
-CENTRIFUGE_IMG="RADCOT.img"
+CENTRIFUGE_IMG="centrifuge-patric.img"
 EXCLUDE_TAXIDS=""
 SKIP_EXISTING=1
 #If you have your own launcher setup on stampede2 just point MY_PARAMRUN at it
 #this will override the TACC_LAUNCHER...
 PARAMRUN="${MY_PARAMRUN:-$TACC_LAUNCHER_DIR/paramrun}"
 MIN_ABUNDANCE=0.01
+FORMAT="fasta"
 
 #
 # Some needed functions
@@ -48,7 +49,7 @@ function HELP() {
     printf "Usage:\n  %s -q DIR_OR_FILE\n\n" "$(basename "$0")"
     printf "Usage:\n  %s -d IN_DIR\n\n" "$(basename "$0")"
     printf "Usage:\n  %s -a FASTX\n\n" "$(basename "$0")"
-    printf "Usage:\n  %s -f FASTX_r1 -r FASTX_r2 [-s SINGLETONS]\n\n" \
+    printf "Usage:\n  %s -1 FASTX_r1 -2 FASTX_r2 [-s SINGLETONS]\n\n" \
       "$(basename "$0")"
   
     echo "Required arguments:"
@@ -61,10 +62,11 @@ function HELP() {
     echo " -a FASTX (single)"
     echo ""
     echo "OR"
-    echo " -f FASTX_r1 (forward)"
-    echo " -r FASTX_r2 (reverse)"
+    echo " -1 FASTX_r1 (forward)"
+    echo " -2 FASTX_r2 (reverse)"
     echo ""
     echo "Options:"
+    echo " -f FORMAT ($FORMAT)"
     echo " -i INDEX ($INDEX)"
     echo " -o OUT_DIR ($OUT_DIR)"
     echo " -s SINGLETONS"
@@ -80,7 +82,7 @@ function HELP() {
 #
 [[ $# -eq 0 ]] && HELP
 
-while getopts :a:d:i:f:m:o:q:r:s:m:x:kh OPT; do
+while getopts :a:d:i:f:m:o:q:r:s:m:x:k:1:2h OPT; do
     case $OPT in
         a)
             FASTX="$OPTARG"
@@ -95,7 +97,7 @@ while getopts :a:d:i:f:m:o:q:r:s:m:x:kh OPT; do
             INDEX="$OPTARG"
             ;;
         f)
-            FORWARD="$OPTARG"
+            FORMAT="$OPTARG"
             ;;
         k)
             SKIP_EXISTING=1
@@ -109,7 +111,10 @@ while getopts :a:d:i:f:m:o:q:r:s:m:x:kh OPT; do
         q)
             QUERY="$QUERY $OPTARG"
             ;;
-        r)
+        1)
+            FORWARD="$OPTARG"
+            ;;
+        2)
             REVERSE="$OPTARG"
             ;;
         s)

@@ -48,23 +48,39 @@ def filter_report(report):
 def download_genomes(filtered_list):
     
     #change working directory
-    os.chdir(args.output)
+    try:
+        os.chdir(args.output)
+    except FileNotFoundError as e:
+        print("{}, creating {} for you".format(e, args.output))
+        os.mkdir(args.output)
+        os.chdir(args.output)
 
     print("Now trying to get the PATRIC id's from p3.theseed.org")
     for taxID in filtered_list:
-        try:
-            list_of_patricIDs = p3_all_genomes('-e', 'taxon_id'+','+str(taxID))
-#                '-e', 'genome_status,Complete')
-            list_of_patricIDs = list_of_patricIDs.split('\n') 
-            list_of_patricIDs = [x for x in list_of_patricIDs if x != '' and x != 'genome.genome_id']
-            print("These are the PATRIC id's I got from {}: {}".format(taxID,list_of_patricIDs))
+        for i in range(0,3):
+            try:
+                print("Attempt {} of 3".format(i+1))
+                list_of_patricIDs = p3_all_genomes('-e', 'taxon_id'+','+str(taxID))
+    #                '-e', 'genome_status,Complete')
+                list_of_patricIDs = list_of_patricIDs.split('\n') 
+                list_of_patricIDs = [x for x in list_of_patricIDs if x != '' and x != 'genome.genome_id']
+                print("These are the PATRIC id's I got from {}: {}".format(taxID,list_of_patricIDs))
             
-        except Exception as e:
-            print("Something went wrong with the PATRIC cli. Error: {}".format(e))
-            print("Can not do much without PATRIC cli")
-            print("Contact patricbrc.org")
-            print("Exiting...")
-            sys.exit(1)
+            except Exception as e:
+                if i == 2:
+                    print("patricbrc.org or p3.theseed.org might be down")
+                    print("Contact patricbrc.org")
+                    print("Exiting...")
+                    sys.exit(1)
+                else:
+                    print("Something went wrong with the PATRIC cli. Error: {}".format(e))
+                    print("Can not continue without PATRIC cli, retrying after 5 seconds")
+                    time.sleep(5)
+                    continue
+
+            break
+                
+                
 
         for patricID in list_of_patricIDs:
             if patricID != '' and patricID != 'genome.genome_id':

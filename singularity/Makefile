@@ -2,7 +2,7 @@ SING242 = /usr/local/bin/singularity #2.4.2-dist
 SING231 = /home/vagrant/bin/singularity #2.3.1-dist
 
 SINGULARITY = $(SING231)
-IMG_NAME = RADCOT.img
+IMG_NAME = centrifuge-patric.img
 DEF_NAME = image.def
 SIZE = 3036
 
