@@ -251,7 +251,7 @@ elif [[ -n "$QUERY" ]]; then
 # Else "error"
 #
 else
-    echo "Must have -d IN_DIR/-a FASTX/-f FORWARD & -r REVERSE [-s SINGLETON]"
+    echo "Must have -q FILE_OR_DIR/-d IN_DIR/-a FASTX/-f FORWARD & -r REVERSE [-s SINGLETON]"
     exit 1
 fi
 
@@ -273,7 +273,7 @@ if [[ $NUM_INPUT -gt 0 ]]; then
         if [[ $NUM_SPLIT_FILES -lt 1 ]]; then
             let i++
             printf "%6d: Split %s\n" $i "$(basename "$FILE")"
-            echo "singularity exec $CENTRIFUGE_IMG fxsplit.py -f $FILE -o $FILE_SPLIT_DIR -n $MAX_SEQS_PER_FILE" >> "$SPLIT_PARAM"
+            echo "singularity exec $CENTRIFUGE_IMG fxsplit.py -i $FILE -f $FORMAT -o $FILE_SPLIT_DIR -n $MAX_SEQS_PER_FILE" >> "$SPLIT_PARAM"
         fi
     done < "$INPUT_FILES"
 
@@ -296,10 +296,10 @@ if [[ $NUM_INPUT -gt 0 ]]; then
         if [[ "$SKIP_EXISTING" -gt 0 ]] && [[ -s "$SUM_FILE" ]] && [[ -s "$TSV_FILE" ]]; then
             echo "Skipping $BASENAME - sum/tsv files exist"
         else
-            if [[ "$BASENAME" =~ "fasta" ]]; then
+            if [[ "$FORMAT" == "fasta" ]]; then
     #            echo "This is a fasta" #debug
                 echo "$RUN_CENTRIFUGE -f -x $INDEX -U $FILE -S $REPORT_DIR/$BASENAME.sum --report-file $REPORT_DIR/$BASENAME.tsv" >> "$CENT_PARAM"
-            elif [[ "$BASENAME" =~ "fastq" ]]; then
+            elif [[ "$FORMAT" == "fastq" ]]; then
     #            echo "This is a fastq" #debug
                 echo "$RUN_CENTRIFUGE -x $INDEX -U $FILE -S $REPORT_DIR/$BASENAME.sum --report-file $REPORT_DIR/$BASENAME.tsv" >> "$CENT_PARAM"
             else

@@ -15,4 +15,4 @@ export MY_PARAMRUN="$HOME/launcher/paramrun"
 
 [[ -d "$OUT_DIR" ]] && rm -rf $OUT_DIR/*
 
-sh run.sh -q "$WORK/in" -o $OUT_DIR -x 9606,32630
+sh run.sh -q "$WORK/in" -f fastq -o $OUT_DIR -x 9606,32630
