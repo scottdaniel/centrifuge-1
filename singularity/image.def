@@ -86,6 +86,6 @@ EOF
     # 
     # Mount points for Ocelote if needed
     # 
-    #mkdir /extra 
-    #mkdir /xdisk 
-    #mkdir /rsgrps
+    mkdir /extra 
+    mkdir /xdisk 
+    mkdir /rsgrps
