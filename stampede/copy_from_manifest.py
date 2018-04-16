@@ -63,7 +63,7 @@ for manifest in manifests:
 
             copyfile(path, os.path.join(partial, os.path.basename(file))) 
 
-dest = 'kyclark/applications/' + app_base
-upload = '/home1/03137/kyclark/cyverse-cli/bin/files-upload'
+dest = 'scottdaniel/applications/' + app_base
+upload = '/home1/03137/scottdaniel/cyverse-cli/bin/files-upload'
 run([upload, '-F', tmp_dir, dest])
 print('Done, check "{}"'.format(dest))
