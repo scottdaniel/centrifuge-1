@@ -329,15 +329,16 @@ else
     exit 1
 fi
 
+rm "$CENT_PARAM"
 #
 # Collapse the results
 #
 COLLAPSE_DIR="$OUT_DIR/collapsed"
 echo "Collapsing reports"
-echo "DEBUG"
-echo "These are the input files: "$INPUT_FILES""
-echo "This is the report dir: "$REPORT_DIR""
-echo "This is the collapse dir: "$COLLAPSE_DIR""
+#echo "DEBUG"
+#echo "These are the input files: "$INPUT_FILES""
+#echo "This is the report dir: "$REPORT_DIR""
+#echo "This is the collapse dir: "$COLLAPSE_DIR""
 singularity exec $CENTRIFUGE_IMG collapse.py -l "$INPUT_FILES" -r "$REPORT_DIR" -o "$COLLAPSE_DIR"
 echo "Finished collapse"
 
