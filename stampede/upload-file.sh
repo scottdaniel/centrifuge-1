@@ -16,7 +16,7 @@ fi
 
 BASENAME=$(basename "$FILE")
 FILE_DIR=$(cd "$(dirname "$FILE")" && pwd)
-DEST_DIR=$(echo "$FILE_DIR" | perl -pe "s{$WORK}{kyclark/applications}")
+DEST_DIR=$(echo "$FILE_DIR" | perl -pe "s{$WORK}{scottdaniel/applications}")
 
 echo "Deleting file \"$DEST_DIR/$BASENAME\""
 files-delete "$DEST_DIR/$BASENAME"

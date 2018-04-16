@@ -25,6 +25,9 @@ jobs-template:
 jobs-submit:
 	jobs-submit -F job.json
 
+list:
+	files-list -S data.iplantcollaborative.org scottdaniel/applications/$(APP)/stampede
+
 jimmy: clean
 	./submit.p6 --query-dir=$(SCRATCH)/jimmy/fever/fasta --out-dir=$(SCRATCH)/jimmy/fever/centrifuge-nt --index=nt --partition=largemem
 

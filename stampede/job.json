@@ -1,9 +1,23 @@
 {
-  "name": "centrifuge-patric test-1523914767",
+  "name": "centrifuge-patric test-1523917189",
   "appId": "centrifuge-patric-0.0.5",
+  "batchQueue": "development",
+  "executionSystem": "tacc-stampede2-sdaniel",
+  "maxRunTime": "2:00:00",
+  "memoryPerNode": "32GB",
+  "nodeCount": 1,
+  "processorsPerNode": 16,
   "archive": true,
+  "archiveSystem": "data.iplantcollaborative.org",
+  "archivePath": null,
   "inputs": {
+    "QUERY": [
+      "scottdaniel/mouse"
+      ]
   },
   "parameter": {
+    "FORMAT": [
+      "fastq"
+      ]
   }
 }
