@@ -10,7 +10,7 @@
     "defaultMaxRunTime": "12:00:00",
     "defaultNodeCount": 1,
     "defaultQueue": "normal",
-    "deploymentPath": "sdaniel/applications/centrifuge-0.0.5/stampede",
+    "deploymentPath": "scottdaniel/applications/centrifuge-patric-0.0.5/stampede",
     "deploymentSystem": "data.iplantcollaborative.org",
     "executionSystem": "tacc-stampede2-sdaniel",
     "executionType": "HPC",

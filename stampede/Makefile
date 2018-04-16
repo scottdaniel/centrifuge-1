@@ -1,5 +1,5 @@
-APP = centrifuge-0.0.4
-EMAIL = kyclark@email.arizona.edu
+APP = centrifuge-patric-0.0.5
+EMAIL = scottdaniel@email.arizona.edu
 
 run: clean
 	./submit.sh $(SCRATCH)/gwatts/bug_mixing/wgs/fasta $(SCRATCH)/centrifuge-out

@@ -1,12 +1,8 @@
 {
-  "name": "centrifuge-dolphin",
-  "appId": "centrifuge-0.0.4",
+  "name": "centrifuge-patric test-1523914767",
+  "appId": "centrifuge-patric-0.0.5",
   "archive": true,
   "inputs": {
-    "QUERY": [ 
-      "kyclark/data/dolphin/fasta/Dolphin_1_z04.fa",
-      "kyclark/data/dolphin/fasta/Dolphin_2_z09.fa"
-    ]
   },
   "parameter": {
   }
