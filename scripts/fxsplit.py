@@ -68,7 +68,7 @@ def main():
 
     record_iter = SeqIO.parse(handle, file_format)
     for i, batch in enumerate(batch_iterator(record_iter, max_per)):
-        filename = os.path.join(out_dir, basename + '.' + str(i+1) + file_format)
+        filename = os.path.join(out_dir, basename + '.' + str(i+1) + ext)
         with open(filename, "w") as handle:
             count = SeqIO.write(batch, handle, file_format)
         print("Wrote {:d} records to {:s}".format(count, filename))
