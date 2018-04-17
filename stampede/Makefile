@@ -17,7 +17,7 @@ job:
 	jobs-submit -F job.json
 
 jobs-template:
-	jobs-template $(APP) > job.json
+	jobs-template -A $(APP) > job.json
 
 jobs-submit:
 	jobs-submit -F job.json
