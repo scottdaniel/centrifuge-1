@@ -107,7 +107,7 @@
             "details": {
                 "description": "NCBI Taxon IDs that are excluded from output and abundance calculations",
                 "label": "Exclude Tax IDs",
-                "argument": "-x",
+                "argument": "-x ",
                 "repeatArgument": false,
                 "showArgument": true
             }
@@ -133,7 +133,7 @@
             "details": {
                 "description": "FASTA (default) or FASTQ",
                 "label": "File format",
-                "argument": "-f",
+                "argument": "-f ",
                 "repeatArgument": false,
                 "showArgument": true
             }
@@ -152,7 +152,7 @@
             "details": {
                 "description": "Minimum abundance of a species required to download from PATRIC, Default is 0.01 / 1%",
                 "label": "Minimum abundance",
-                "argument": "-m",
+                "argument": "-m ",
                 "repeatArgument": false,
                 "showArgument": true
             }
