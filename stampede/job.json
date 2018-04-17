@@ -1,23 +1,23 @@
 {
-  "name": "centrifuge-patric test-1523917189",
+  "name": "centrifuge-patric soilAssembly test",
   "appId": "centrifuge-patric-0.0.5",
-  "batchQueue": "development",
+  "batchQueue": "normal",
   "executionSystem": "tacc-stampede2-sdaniel",
-  "maxRunTime": "2:00:00",
-  "memoryPerNode": "32GB",
+  "maxRunTime": "12:00:00",
+  "memoryPerNode": "96GB",
   "nodeCount": 1,
   "processorsPerNode": 16,
-  "archive": true,
+  "archive": false,
   "archiveSystem": "data.iplantcollaborative.org",
-  "archivePath": null,
+  "archivePath": "",
   "inputs": {
     "QUERY": [
-      "scottdaniel/mouse"
+      "scottdaniel/soilAssembly"
       ]
   },
   "parameter": {
     "FORMAT": [
-      "fastq"
+      "fasta"
       ]
   }
 }
