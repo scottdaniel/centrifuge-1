@@ -80,8 +80,11 @@ def main():
         basename = os.path.basename(fasta)
         print('{:4}: {}'.format(i + 1, basename))
         basename, ext = os.path.splitext(os.path.basename(fasta))
+        ###
+        #trying to handle gzip case
         if ext == '.gz':
             basename, ext = os.path.splitext(basename)
+        ####
         splits = {'tsv': [], 'sum': []}
         for split in split_files:
             regex = r'({})\.(\d+)\.({})\.(tsv|sum)'.format(basename, ext[1:])
