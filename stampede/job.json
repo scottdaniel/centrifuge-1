@@ -12,12 +12,18 @@
   "archivePath": "",
   "inputs": {
     "QUERY": [
-      "scottdaniel/soilAssembly"
+      "scottdaniel/foodMicrobes"
       ]
   },
   "parameter": {
     "FORMAT": [
-      "fasta"
+      "fastq"
+      ],
+    "MIN_ABUNDANCE": [
+      0.05
+      ],
+    "EXCLUDE_TAXIDS": [
+      "9606,32630"
       ]
   }
 }
