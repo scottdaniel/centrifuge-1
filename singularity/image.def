@@ -39,9 +39,8 @@ MirrorURL: http://us.archive.ubuntu.com/ubuntu/
     unzip centrifuge.zip
     mv centrifuge-1.0.3-beta centrifuge
 
-    git clone https://github.com/scottdaniel/centrifuge-patric.git --branch RADCOT \
-        --single-branch centrifuge-patric
-    
+    git clone https://github.com/scottdaniel/centrifuge-patric.git
+
 	wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
     bash Miniconda3-latest-Linux-x86_64.sh -b -p /app/miniconda
 	rm Miniconda3-latest-Linux-x86_64.sh 
