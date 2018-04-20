@@ -3,9 +3,12 @@ An app that can:
 - Identify bacterial species from a metagenomic sample
 - Download genomes of said species
 
-## Do Part Two [here](https://github.com/hurwitzlab/bowcuff)
+## Then Part Two [here](https://github.com/hurwitzlab/bowtie-samtools)
 - Quantify transcripts of genes within these species
-- Generate graphs of RNA count differences
+
+## And then Part Three [here](https://github.com/hurwitzlab/cuffdiff-keggR)
+- Annotate RNA counts of genes with KEGG pathway information
+- Generate graphs of RNA count differences per KEGG module
 
 ## How to use:
 1. Use https://www.imicrobe.us/#/apps to access the app with your [cyverse login](http://www.cyverse.org/create-account)
