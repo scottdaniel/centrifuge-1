@@ -1,5 +1,5 @@
 # Radcot Part One
-A pipeline that can:
+An app that can:
 - Identify bacterial species from a metagenomic sample
 - Download genomes of said species
 
