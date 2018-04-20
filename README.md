@@ -1,9 +1,9 @@
-# Radcot Part 1
+# Radcot Part One
 A pipeline that can:
 - Identify bacterial species from a metagenomic sample
 - Download genomes of said species
 
-## In part 2 [here](https://github.com/hurwitzlab/bowcuff)
+## Do Part Two [here](https://github.com/hurwitzlab/bowcuff)
 - Quantify transcripts of genes within these species
 - Generate graphs of RNA count differences
 
