@@ -14,8 +14,8 @@ OR
 2. Get the singularity image like so: `wget [address we setup]`
 3. Run the pipeline on an HPC with a slurm scheduler<sup>1</sup>
 
-~~~~
+---
 <sup>1</sup>I assume this can be adapted to run on other 
 batch-scheduled high-performance computer systems 
 but this has not been tested.
-~~~~
+
