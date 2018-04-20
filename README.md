@@ -1,12 +1,11 @@
-# Radcot Part One
-An app that can:
+## [centrifuge-patric - Radcot Part One - YOU ARE HERE](https://github.com/scottdaniel/centrifuge-patric)
 - Identify bacterial species from a metagenomic sample
 - Download genomes of said species
 
-## Then Part Two [here](https://github.com/hurwitzlab/bowtie-samtools)
+### [bowtie-samtools - Radcot Part Two - Next step](https://github.com/hurwitzlab/bowtie-samtools)
 - Quantify transcripts of genes within these species
 
-## And then Part Three [here](https://github.com/hurwitzlab/cuffdiff-keggR)
+### [cuffdiff-keggR - Radcot Part Three - Next step](https://github.com/hurwitzlab/cuffdiff-keggR)
 - Annotate RNA counts of genes with KEGG pathway information
 - Generate graphs of RNA count differences per KEGG module
 
@@ -21,4 +20,3 @@ OR
 <sup>1</sup>I assume this can be adapted to run on other 
 batch-scheduled high-performance computer systems 
 but this has not been tested.
-
