@@ -1,11 +1,13 @@
-# Radcot Part One
-A pipeline that can:
+## [centrifuge-patric - Radcot Part One - YOU ARE HERE](https://github.com/scottdaniel/centrifuge-patric)
 - Identify bacterial species from a metagenomic sample
 - Download genomes of said species
 
-## Do Part Two [here](https://github.com/hurwitzlab/bowcuff)
+### [bowtie-samtools - Radcot Part Two - 2nd step](https://github.com/hurwitzlab/bowtie-samtools)
 - Quantify transcripts of genes within these species
-- Generate graphs of RNA count differences
+
+### [cuffdiff-keggR - Radcot Part Three - 3rd step](https://github.com/hurwitzlab/cuffdiff-keggR)
+- Annotate RNA counts of genes with KEGG pathway information
+- Generate graphs of RNA count differences per KEGG module
 
 ## How to use:
 1. Use https://www.imicrobe.us/#/apps to access the app with your [cyverse login](http://www.cyverse.org/create-account)
@@ -18,4 +20,3 @@ OR
 <sup>1</sup>I assume this can be adapted to run on other 
 batch-scheduled high-performance computer systems 
 but this has not been tested.
-
