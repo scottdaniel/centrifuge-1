@@ -34,7 +34,9 @@ EXCLUDE_TAXIDS=""
 SKIP_EXISTING=1
 #If you have your own launcher setup on stampede2 just point MY_PARAMRUN at it
 #this will override the TACC_LAUNCHER...
+echo "\$MY_PARAMRUN = $MY_PARAMRUN"
 PARAMRUN="${MY_PARAMRUN:-$TACC_LAUNCHER_DIR/paramrun}"
+echo "\$PARAMRUN = $PARAMRUN"
 MIN_ABUNDANCE=0.01
 FORMAT="fasta"
 

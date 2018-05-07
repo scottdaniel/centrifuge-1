@@ -9,7 +9,7 @@
 #SBATCH --mail-type BEGIN,END,FAIL
 #SBATCH --mail-user scottdaniel@email.arizona.edu
 
-OUT_DIR="$WORK/centrifuge_test"
+OUT_DIR="$WORK/scottdaniel/gzip_test"
 
 export MY_PARAMRUN="$HOME/launcher/paramrun"
 

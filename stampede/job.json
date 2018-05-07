@@ -1,5 +1,5 @@
 {
-  "name": "centrifuge-patric soilAssembly test",
+  "name": "centrifuge-patric mock_community test",
   "appId": "centrifuge-patric-0.0.5",
   "batchQueue": "normal",
   "executionSystem": "tacc-stampede2-sdaniel",
@@ -7,12 +7,12 @@
   "memoryPerNode": "96GB",
   "nodeCount": 1,
   "processorsPerNode": 16,
-  "archive": false,
+  "archive": true,
   "archiveSystem": "data.iplantcollaborative.org",
   "archivePath": "",
   "inputs": {
     "QUERY": [
-      "scottdaniel/foodMicrobes"
+      "scottdaniel/mock_community"
       ]
   },
   "parameter": {
