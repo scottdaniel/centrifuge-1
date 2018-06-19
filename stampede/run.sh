@@ -20,6 +20,7 @@ set -u
 #
 IN_DIR=""
 QUERY=""
+FORMAT="fasta"
 MODE="single"
 FASTX=""
 FORWARD=""
@@ -29,7 +30,13 @@ INDEX="p_compressed+h+v"
 OUT_DIR="$PWD/centrifuge-out"
 INDEX_DIR="/work/05066/imicrobe/iplantc.org/data/centrifuge-indexes"
 MAX_SEQS_PER_FILE=1000000
+<<<<<<< HEAD
 CENTRIFUGE_IMG="centrifuge-patric.img"
+||||||| merged common ancestors
+CENTRIFUGE_IMG="centrifuge-1.0.3-beta.img"
+=======
+CENTRIFUGE_IMG="/work/05066/imicrobe/singularity/centrifuge-1.0.4.img"
+>>>>>>> 6cdbc66c6abced72fd41ebe182361bf4dd23acc7
 EXCLUDE_TAXIDS=""
 SKIP_EXISTING=1
 #If you have your own launcher setup on stampede2 just point MY_PARAMRUN at it
@@ -71,6 +78,7 @@ function HELP() {
     echo " -f FORMAT ($FORMAT)"
     echo " -i INDEX ($INDEX)"
     echo " -o OUT_DIR ($OUT_DIR)"
+    echo " -t FORMAT ($FORMAT)"
     echo " -s SINGLETONS"
     echo " -k SKIP_EXISTING ($SKIP_EXISTING)"
     echo " -m MIN_ABUNDANCE ($MIN_ABUNDANCE)"
@@ -84,7 +92,13 @@ function HELP() {
 #
 [[ $# -eq 0 ]] && HELP
 
+<<<<<<< HEAD
 while getopts :a:d:i:f:m:o:q:r:s:m:x:k:1:2h OPT; do
+||||||| merged common ancestors
+while getopts :a:d:i:f:m:o:q:r:s:x:kh OPT; do
+=======
+while getopts :a:d:i:f:m:o:q:r:s:t:x:kh OPT; do
+>>>>>>> 6cdbc66c6abced72fd41ebe182361bf4dd23acc7
     case $OPT in
         a)
             FASTX="$OPTARG"
@@ -122,9 +136,16 @@ while getopts :a:d:i:f:m:o:q:r:s:m:x:k:1:2h OPT; do
         s)
             SINGLETONS="$OPTARG"
             ;;
+<<<<<<< HEAD
         m)
             MIN_ABUNDANCE="$OPTARG"
             ;;
+||||||| merged common ancestors
+=======
+        t)
+            FORMAT="$OPTARG"
+            ;;
+>>>>>>> 6cdbc66c6abced72fd41ebe182361bf4dd23acc7
         x)
             EXCLUDE_TAXIDS="$OPTARG"
             ;;
@@ -275,7 +296,13 @@ if [[ $NUM_INPUT -gt 0 ]]; then
         if [[ $NUM_SPLIT_FILES -lt 1 ]]; then
             let i++
             printf "%6d: Split %s\n" $i "$(basename "$FILE")"
+<<<<<<< HEAD
             echo "singularity exec $CENTRIFUGE_IMG fxsplit.py -i $FILE -f $FORMAT -o $FILE_SPLIT_DIR -n $MAX_SEQS_PER_FILE" >> "$SPLIT_PARAM"
+||||||| merged common ancestors
+            echo "singularity exec $CENTRIFUGE_IMG fasplit.py -f $FILE -o $FILE_SPLIT_DIR -n $MAX_SEQS_PER_FILE" >> "$SPLIT_PARAM"
+=======
+            echo "singularity exec $CENTRIFUGE_IMG fasplit.py -i $FILE -f $FORMAT -o $FILE_SPLIT_DIR -n $MAX_SEQS_PER_FILE" >> "$SPLIT_PARAM"
+>>>>>>> 6cdbc66c6abced72fd41ebe182361bf4dd23acc7
         fi
     done < "$INPUT_FILES"
 
@@ -323,8 +350,12 @@ NUM_CENT_JOBS=$(lc "$CENT_PARAM")
 if [[ "$NUM_CENT_JOBS" -gt 0 ]]; then
     echo "Running \"$NUM_CENT_JOBS\" for Centrifuge \"$CENT_PARAM\""
     export LAUNCHER_JOB_FILE="$CENT_PARAM"
-    export LAUNCHER_PPN=4
-    "$LAUNCHER_DIR/paramrun"
+    if [[ $INDEX == 'nt' ]]; then
+        export LAUNCHER_PPN=1 # nt requires ALL THE MEMORY
+    else
+        export LAUNCHER_PPN=4 
+    fi
+    $PARAMRUN
     echo "Finished Centrifuge"
 else
     echo "There are no Centrifuge jobs to run!"
@@ -352,6 +383,7 @@ echo "Finished collapse"
 echo "Starting bubble"
 singularity exec $CENTRIFUGE_IMG centrifuge_bubble.r --dir "$COLLAPSE_DIR" --outdir "$PLOT_DIR" --outfile "bubble" --title "centrifuge"
 
+<<<<<<< HEAD
 #BUBBLE_PARAM="$PWD/$$.bubble.param"
 #echo "singularity exec $CENTRIFUGE_IMG centrifuge_bubble.r --dir $COLLAPSE_DIR --outdir $PLOT_DIR --outfile bubble --title centrifuge" > "$BUBBLE_PARAM"
 #export LAUNCHER_JOB_FILE="$BUBBLE_PARAM"
@@ -367,6 +399,15 @@ echo "Getting genomes and annotations from patricbrc.org"
 #-r directory with tsv report files -o output directory for genomes and annotations
 singularity exec $CENTRIFUGE_IMG cfuge_to_genome.py -r "$COLLAPSE_DIR" -o $GENOME_DIR -m $MIN_ABUNDANCE
 
+||||||| merged common ancestors
+#BUBBLE_PARAM="$PWD/$$.bubble.param"
+#echo "singularity exec $CENTRIFUGE_IMG centrifuge_bubble.r --dir $COLLAPSE_DIR --outdir $PLOT_DIR --outfile bubble --title centrifuge" > "$BUBBLE_PARAM"
+#export LAUNCHER_JOB_FILE="$BUBBLE_PARAM"
+#"$LAUNCHER_DIR/paramrun"
+echo "Finished bubble"
+
+=======
+>>>>>>> 6cdbc66c6abced72fd41ebe182361bf4dd23acc7
 echo "Done, look in OUT_DIR \"$OUT_DIR\""
 echo "Comments to Ken Youens-Clark <kyclark@email.arizona.edu>"
 echo "or Scott Daniel <scottdaniel@email.arizona.edu>"

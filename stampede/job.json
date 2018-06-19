@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "name": "centrifuge-patric mock_community test",
   "appId": "centrifuge-patric-0.0.5",
   "batchQueue": "normal",
@@ -7,14 +8,46 @@
   "memoryPerNode": "96GB",
   "nodeCount": 1,
   "processorsPerNode": 16,
+||||||| merged common ancestors
+  "name": "centrifuge-dolphin",
+  "appId": "centrifuge-0.0.4",
+=======
+  "name":"centrifuge-0.0.6-test",
+  "appId": "centrifuge-0.0.6",
+  "batchQueue": "normal",
+  "executionSystem": "tacc-stampede2-kyclark",
+  "maxRunTime": "12:00:00",
+  "memoryPerNode": "32GB",
+  "nodeCount": 1,
+  "processorsPerNode": 16,
+>>>>>>> 6cdbc66c6abced72fd41ebe182361bf4dd23acc7
   "archive": true,
+<<<<<<< HEAD
   "archiveSystem": "data.iplantcollaborative.org",
   "archivePath": "",
+||||||| merged common ancestors
+=======
+  "archiveSystem": "data.iplantcollaborative.org",
+  "archivePath": null,
+>>>>>>> 6cdbc66c6abced72fd41ebe182361bf4dd23acc7
   "inputs": {
+<<<<<<< HEAD
     "QUERY": [
       "scottdaniel/mock_community"
       ]
+||||||| merged common ancestors
+    "QUERY": [ 
+      "kyclark/data/dolphin/fasta/Dolphin_1_z04.fa",
+      "kyclark/data/dolphin/fasta/Dolphin_2_z09.fa"
+    ]
+=======
+    "QUERY": [ 
+      "/kyclark/data/dolphin/fasta/Dolphin_1_z04.fa",
+      "/kyclark/data/dolphin/fasta/Dolphin_2_z09.fa"
+    ]
+>>>>>>> 6cdbc66c6abced72fd41ebe182361bf4dd23acc7
   },
+<<<<<<< HEAD
   "parameter": {
     "FORMAT": [
       "fastq"
@@ -26,4 +59,31 @@
       "9606,32630"
       ]
   }
+||||||| merged common ancestors
+  "parameter": {
+  }
+=======
+  "parameters": {
+    "INDEX": "p+h+v",
+    "EXCLUDE_TAXIDS": "9606",
+    "FORMAT": "fasta"
+  },
+  "notifications": [
+    {
+      "url":"https://requestbin.agaveapi.co/1if1nnc1?job_id=${JOB_ID}&status=${JOB_STATUS}",
+      "event":"*",
+      "persistent":true
+    },
+    {
+      "url":"kyclark@gmail.com",
+      "event":"FINISHED",
+          "persistent":false
+    },
+    {
+      "url":"kyclark@gmail.com",
+      "event":"FAILED",
+      "persistent":false
+    }
+  ]
+>>>>>>> 6cdbc66c6abced72fd41ebe182361bf4dd23acc7
 }

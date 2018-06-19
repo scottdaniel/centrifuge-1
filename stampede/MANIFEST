@@ -1,4 +1,9 @@
 ./test.sh
 ./template.sh
 ./run.sh
+<<<<<<< HEAD
 ./centrifuge-patric.img
+||||||| merged common ancestors
+./centrifuge-1.0.3-beta.img
+=======
+>>>>>>> 6cdbc66c6abced72fd41ebe182361bf4dd23acc7
