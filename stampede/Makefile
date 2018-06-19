@@ -1,4 +1,4 @@
-APP = centrifuge-0.0.4
+APP = centrifuge-0.0.6
 EMAIL = kyclark@email.arizona.edu
 
 run: clean
@@ -19,8 +19,8 @@ test: clean
 job:
 	jobs-submit -F job.json
 
-jobs-template:
-	jobs-template $(APP) > job.json
+template:
+	jobs-template -A $(APP) > job.json
 
 jobs-submit:
 	jobs-submit -F job.json
@@ -60,3 +60,6 @@ pam2:
 
 imicrobe:
 	sbatch -N 4 -n 4 ./run.sh -d $(WORK)/iplantc.org/data/imicrobe/projects -o $(WORK)/iplantc.org/data/imicrobe/centrifuge 
+
+myriam:
+	sbatch ./run_centrifuge.sh -q $(WORK)/myriam/fasta/ -o $(WORK)/myriam/centrifuge

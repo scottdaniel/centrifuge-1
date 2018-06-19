@@ -19,6 +19,7 @@ set -u
 #
 IN_DIR=""
 QUERY=""
+FORMAT="fasta"
 MODE="single"
 FASTA=""
 FORWARD=""
@@ -28,7 +29,7 @@ INDEX="p_compressed+h+v"
 OUT_DIR="$PWD/centrifuge-out"
 INDEX_DIR="/work/05066/imicrobe/iplantc.org/data/centrifuge-indexes"
 MAX_SEQS_PER_FILE=1000000
-CENTRIFUGE_IMG="centrifuge-1.0.3-beta.img"
+CENTRIFUGE_IMG="/work/05066/imicrobe/singularity/centrifuge-1.0.4.img"
 EXCLUDE_TAXIDS=""
 SKIP_EXISTING=1
 PARAMRUN="$TACC_LAUNCHER_DIR/paramrun"
@@ -63,6 +64,7 @@ function HELP() {
     echo "Options:"
     echo " -i INDEX ($INDEX)"
     echo " -o OUT_DIR ($OUT_DIR)"
+    echo " -t FORMAT ($FORMAT)"
     echo " -s SINGLETONS"
     echo " -k SKIP_EXISTING ($SKIP_EXISTING)"
     echo " -x EXCLUDE_TAXIDS"
@@ -75,7 +77,7 @@ function HELP() {
 #
 [[ $# -eq 0 ]] && HELP
 
-while getopts :a:d:i:f:m:o:q:r:s:x:kh OPT; do
+while getopts :a:d:i:f:m:o:q:r:s:t:x:kh OPT; do
     case $OPT in
         a)
             FASTA="$OPTARG"
@@ -109,6 +111,9 @@ while getopts :a:d:i:f:m:o:q:r:s:x:kh OPT; do
             ;;
         s)
             SINGLETONS="$OPTARG"
+            ;;
+        t)
+            FORMAT="$OPTARG"
             ;;
         x)
             EXCLUDE_TAXIDS="$OPTARG"
@@ -260,7 +265,7 @@ if [[ $NUM_INPUT -gt 0 ]]; then
         if [[ $NUM_SPLIT_FILES -lt 1 ]]; then
             let i++
             printf "%6d: Split %s\n" $i "$(basename "$FILE")"
-            echo "singularity exec $CENTRIFUGE_IMG fasplit.py -f $FILE -o $FILE_SPLIT_DIR -n $MAX_SEQS_PER_FILE" >> "$SPLIT_PARAM"
+            echo "singularity exec $CENTRIFUGE_IMG fasplit.py -i $FILE -f $FORMAT -o $FILE_SPLIT_DIR -n $MAX_SEQS_PER_FILE" >> "$SPLIT_PARAM"
         fi
     done < "$INPUT_FILES"
 
@@ -299,8 +304,12 @@ NUM_CENT_JOBS=$(lc "$CENT_PARAM")
 if [[ "$NUM_CENT_JOBS" -gt 0 ]]; then
     echo "Running \"$NUM_CENT_JOBS\" for Centrifuge \"$CENT_PARAM\""
     export LAUNCHER_JOB_FILE="$CENT_PARAM"
-    export LAUNCHER_PPN=4
-    "$LAUNCHER_DIR/paramrun"
+    if [[ $INDEX == 'nt' ]]; then
+        export LAUNCHER_PPN=1 # nt requires ALL THE MEMORY
+    else
+        export LAUNCHER_PPN=4 
+    fi
+    $PARAMRUN
     echo "Finished Centrifuge"
 else
     echo "There are no Centrifuge jobs to run!"
@@ -322,12 +331,6 @@ rm "$INPUT_FILES"
 #
 echo "Starting bubble"
 singularity exec $CENTRIFUGE_IMG centrifuge_bubble.r --dir "$COLLAPSE_DIR" --outdir "$PLOT_DIR" --outfile "bubble" --title "centrifuge"
-
-#BUBBLE_PARAM="$PWD/$$.bubble.param"
-#echo "singularity exec $CENTRIFUGE_IMG centrifuge_bubble.r --dir $COLLAPSE_DIR --outdir $PLOT_DIR --outfile bubble --title centrifuge" > "$BUBBLE_PARAM"
-#export LAUNCHER_JOB_FILE="$BUBBLE_PARAM"
-#"$LAUNCHER_DIR/paramrun"
-echo "Finished bubble"
 
 echo "Done, look in OUT_DIR \"$OUT_DIR\""
 echo "Comments to Ken Youens-Clark <kyclark@email.arizona.edu>"
